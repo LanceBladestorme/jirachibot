@@ -6,11 +6,6 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log(`[Start] ${new Date()}`);
 });
-client.on('message', async message => {
-  if (message.author.bot) return;
-  if(message.content.indexOf(config.prefix) !== 0) return;
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
 fs.readdir("./devents/", (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {
@@ -20,6 +15,11 @@ fs.readdir("./devents/", (err, files) => {
     client.on(eventName, (...args) => eventFunction.run(client, ...args));
   });
 });
+client.on('message', async message => {
+  if (message.author.bot) return;
+  if(message.content.indexOf(config.prefix) !== 0) return;
+  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
 try {
   let commandFile = require(`./dcommands/${command}.js`);
   commandFile.run(client, message, args);
